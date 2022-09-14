@@ -34,7 +34,10 @@ class PngWriter:
     # saves image named _image_ to outdir/name, writing metadata from prompt
     # returns full path of output
     def save_image_and_prompt_to_png(self, image, prompt, name):
-        suffix = '_'.join(prompt.split(' ')) + str(datetime.now) + '.png'
+        print(prompt)
+        print(prompt.split())
+        raise IOError
+        suffix = '_'.join(prompt.split(' ')) + str(datetime.now()) + '.png'
         path = os.path.join(self.outdir, suffix)
         info = PngImagePlugin.PngInfo()
         info.add_text('Dream', prompt)
