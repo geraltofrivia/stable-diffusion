@@ -7,6 +7,7 @@ PromptFormatter -- Utility for converting a Namespace of prompt parameters
              back into a formatted prompt string with command-line switches.
 """
 import os
+from datetime import datetime
 import re
 from PIL import PngImagePlugin
 
@@ -33,7 +34,8 @@ class PngWriter:
     # saves image named _image_ to outdir/name, writing metadata from prompt
     # returns full path of output
     def save_image_and_prompt_to_png(self, image, prompt, name):
-        path = os.path.join(self.outdir, name)
+        suffix = '_'.join(prompt.split(' ')) + str(datetime.now) + '.png'
+        path = os.path.join(self.outdir, suffix)
         info = PngImagePlugin.PngInfo()
         info.add_text('Dream', prompt)
         image.save(path, 'PNG', pnginfo=info)
