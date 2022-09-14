@@ -10,6 +10,7 @@ import copy
 import warnings
 import time
 import ldm.dream.readline
+from datetime import datetime
 from ldm.dream.pngwriter import PngWriter, PromptFormatter
 from ldm.dream.server import DreamServer, ThreadingDreamServer
 from ldm.dream.image_util import make_grid
@@ -265,10 +266,7 @@ def main_loop(t2i, outdir, prompt_as_dir, parser, infile):
                 if do_grid:
                     grid_images[seed] = image
                 else:
-                    if upscaled and opt.save_original:
-                        filename = f'{prefix}.{seed}.postprocessed.png'
-                    else:
-                        filename = f'{prefix}.{seed}.png'
+
                     if opt.variation_amount > 0:
                         iter_opt = argparse.Namespace(**vars(opt))  # copy
                         this_variation = [[seed, opt.variation_amount]]
@@ -289,6 +287,11 @@ def main_loop(t2i, outdir, prompt_as_dir, parser, infile):
                         normalized_prompt = PromptFormatter(
                             t2i, opt).normalize_prompt()
                         metadata_prompt = f'{normalized_prompt} -S{seed}'
+                    if upscaled and opt.save_original:
+                        filename = f'{prefix}.{seed}.postprocessed.png'
+                    else:
+                        filename = '_'.join(metadata_prompt.split()) + str(datetime.now()) + '.png'
+                        # filename = f'{prefix}.{seed}.png'
                     path = file_writer.save_image_and_prompt_to_png(
                         image, metadata_prompt, filename)
                     if (not upscaled) or opt.save_original:
